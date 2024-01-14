@@ -1,0 +1,11 @@
+﻿@model IEnumerable<Clothing>
+
+@if (Model is not null)
+{
+	foreach (Clothing product in Model)
+	{
+		<p class="container">@product.Id</p>
+		<p class="container">@product.Name</p>
+		<p class="container">@product.Stock</p>
+	}
+}
