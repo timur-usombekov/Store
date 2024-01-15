@@ -43,12 +43,16 @@ namespace ClothingStore.Core.Services
 			return addedOrder.ToOrderResponse();
 		}
 
-		public Task<bool> DeleteOrderById(Guid orderGuid)
+		public async Task<bool> DeleteOrderById(Guid orderGuid)
 		{
-			throw new NotImplementedException();
+			if(await _ordersRepository.GetOrderById(orderGuid) is not null)
+			{
+				return await _ordersRepository.DeleteOrderById(orderGuid);
+			}
+			return false;
 		}
 
-		public Task<OrderResponse> GetAllOrders()
+		public Task<List<OrderResponse>> GetAllOrders()
 		{
 			throw new NotImplementedException();
 		}

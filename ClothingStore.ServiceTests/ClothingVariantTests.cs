@@ -187,11 +187,11 @@ namespace ClothingStore.ServiceTests.ClothingVariantsServiceTests
 				Image = "NewImage",
 				Size = Size.XL
 			};
-			Clothing clothing = new();
+			Clothing clothing = new() { Name = "No name"};
 			_clothingVariantsRepository.GetClothingVariantById(request.Id).Returns(new ClothingVariant()
 			{
 				Id = request.Id,
-				Clothing = clothing
+				Clothing = clothing,
 			});
 			ClothingVariantResponse expectedResponse = new()
 			{

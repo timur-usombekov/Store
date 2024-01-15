@@ -4,7 +4,7 @@ namespace ClothingStore.Core.ServiceContracts
 {
 	public interface IOrdersService 
 	{
-		public Task<OrderResponse> GetAllOrders();
+		public Task<List<OrderResponse>> GetAllOrders();
 		public Task<OrderResponse> AddOrder(AddOrderRequest? addOrderRequest);
 		public Task<OrderResponse?> GetOrderById(Guid orderGuid);
 		public Task<OrderResponse?> GetCustomerOrders(Guid customerGuid);

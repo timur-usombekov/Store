@@ -94,9 +94,10 @@ namespace ClothingStore.Core.Services
 				Id = clothingVariantUpdateRequest.Id,
 				Color = clothingVariantUpdateRequest.Color ?? oldClothingVariant.Color,
 				Image = clothingVariantUpdateRequest.Image ?? oldClothingVariant.Image,
-				Size = clothingVariantUpdateRequest.Size ?? oldClothingVariant.Size
+				Size = clothingVariantUpdateRequest.Size ?? oldClothingVariant.Size,
 			};
 			await _clothingVariantsRepository.UpdateClothingVariant(newClothingVariant);
+			newClothingVariant.Clothing = oldClothingVariant.Clothing;
 			return newClothingVariant.ToClothingVariantResponse();
 		}
 		public async Task<bool> DeleteClothingVariantById(Guid clothingVariantId)

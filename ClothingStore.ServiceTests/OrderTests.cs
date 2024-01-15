@@ -1,5 +1,7 @@
-﻿using ClothingStore.Core.Domain.Entities;
+﻿using AutoFixture;
+using ClothingStore.Core.Domain.Entities;
 using ClothingStore.Core.Domain.RepositoryContracts;
+using ClothingStore.Core.DTO.ClothingVariants;
 using ClothingStore.Core.DTO.Customer;
 using ClothingStore.Core.DTO.OrderDetail;
 using ClothingStore.Core.DTO.Orders;
@@ -7,6 +9,7 @@ using ClothingStore.Core.ServiceContracts;
 using ClothingStore.Core.Services;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
+using Xunit;
 
 namespace ClothingStore.ServiceTests.OrdersServiceTests
 {
@@ -16,11 +19,17 @@ namespace ClothingStore.ServiceTests.OrdersServiceTests
 		private readonly IOrdersRepository _ordersRepository;
 		private readonly ICustomerRepository _customerRepository;
 
+		private readonly IFixture _fixture;
+
 		public OrderTests()
 		{
 			_ordersRepository = Substitute.For<IOrdersRepository>();
 			_customerRepository = Substitute.For<ICustomerRepository>();
 			_orderService = new OrderService(_ordersRepository, _customerRepository);
+			_fixture = new Fixture();
+			_fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
+				.ForEach(b => _fixture.Behaviors.Remove(b));
+			_fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 		}
 
 		[Fact]
@@ -67,5 +76,24 @@ namespace ClothingStore.ServiceTests.OrdersServiceTests
 			Assert.Empty(resp.OrderDetails);
 			Assert.True(resp.Customer.Name == expectedOrderRespose.Customer.Name);
 		}
+		[Fact]
+		public async Task DeleteOrder_OrderNotFound_RetunrnsArgumentExeption()
+		{
+			_ordersRepository.GetOrderById(Arg.Any<Guid>()).ReturnsNull();
+
+			await Assert.ThrowsAsync<ArgumentException>(async () =>
+			{
+				await _orderService.DeleteOrderById(Guid.NewGuid());
+			});
+		}
+		[Fact]
+		public async Task DeleteOrder_OrderFounded_RetunrnsTrue()
+		{
+			_ordersRepository.GetOrderById(Arg.Any<Guid>()).Returns(new Order());
+
+			var resp = await _orderService.DeleteOrderById(Guid.NewGuid());
+			Assert.True(resp);
+		}
+		
 	}
 }
