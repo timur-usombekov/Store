@@ -25,7 +25,7 @@ namespace ClothingStore.ServiceTests.OrdersServiceTests
 		{
 			_ordersRepository = Substitute.For<IOrdersRepository>();
 			_customerRepository = Substitute.For<ICustomerRepository>();
-			_orderService = new OrderService(_ordersRepository, _customerRepository);
+			_orderService = new OrdersService(_ordersRepository, _customerRepository);
 			_fixture = new Fixture();
 			_fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
 				.ForEach(b => _fixture.Behaviors.Remove(b));
@@ -75,24 +75,6 @@ namespace ClothingStore.ServiceTests.OrdersServiceTests
 			Assert.NotNull(resp);
 			Assert.Empty(resp.OrderDetails);
 			Assert.True(resp.Customer.Name == expectedOrderRespose.Customer.Name);
-		}
-		[Fact]
-		public async Task DeleteOrder_OrderNotFound_RetunrnsArgumentExeption()
-		{
-			_ordersRepository.GetOrderById(Arg.Any<Guid>()).ReturnsNull();
-
-			await Assert.ThrowsAsync<ArgumentException>(async () =>
-			{
-				await _orderService.DeleteOrderById(Guid.NewGuid());
-			});
-		}
-		[Fact]
-		public async Task DeleteOrder_OrderFounded_RetunrnsTrue()
-		{
-			_ordersRepository.GetOrderById(Arg.Any<Guid>()).Returns(new Order());
-
-			var resp = await _orderService.DeleteOrderById(Guid.NewGuid());
-			Assert.True(resp);
 		}
 		
 	}

@@ -84,6 +84,7 @@ namespace ClothingStore.Core.Services
 			{
 				throw new ArgumentNullException("clothingVariantUpdateRequest is null");
 			}
+			ValidationHelper.ValidateModel(clothingVariantUpdateRequest);
 			var oldClothingVariant = await _clothingVariantsRepository.GetClothingVariantById(clothingVariantUpdateRequest.Id);
 			if (oldClothingVariant == null)
 			{

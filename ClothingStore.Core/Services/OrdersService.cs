@@ -1,20 +1,18 @@
 ﻿using ClothingStore.Core.ServiceContracts;
-using ClothingStore.Core.DTO;
 using ClothingStore.Core.Domain.Entities;
 using ClothingStore.Core.Domain.RepositoryContracts;
 using ClothingStore.Core.Helpers;
 using ClothingStore.Core.DTO.Orders;
-using ClothingStore.Core.DTO.Clothing;
 using ClothingStore.Core.Helpers.Extensions;
 
 namespace ClothingStore.Core.Services
 {
-	public class OrderService : IOrdersService
+	public class OrdersService : IOrdersService
 	{
 		private readonly IOrdersRepository _ordersRepository;
 		private readonly ICustomerRepository _customerRepository;
 
-		public OrderService(IOrdersRepository ordersRepository, ICustomerRepository customerRepository)
+		public OrdersService(IOrdersRepository ordersRepository, ICustomerRepository customerRepository)
 		{
 			_ordersRepository = ordersRepository;
 			_customerRepository = customerRepository;
@@ -52,19 +50,36 @@ namespace ClothingStore.Core.Services
 			return false;
 		}
 
-		public Task<List<OrderResponse>> GetAllOrders()
+		public async Task<List<OrderResponse>> GetAllOrders()
 		{
-			throw new NotImplementedException();
+			var orders = await _ordersRepository.GetAllOrders();
+			var orderResponse = new List<OrderResponse>();
+			foreach (var order in orders)
+			{
+				orderResponse.Add(order.ToOrderResponse());
+			}
+			return orderResponse;
 		}
 
-		public Task<OrderResponse?> GetCustomerOrders(Guid customerGuid)
+		public async Task<List<OrderResponse>> GetCustomerOrders(Guid customerGuid)
 		{
-			throw new NotImplementedException();
+			if (await _customerRepository.GetCustomerById(customerGuid) is not null)
+			{
+				var customerOrders = _ordersRepository.GetAllOrders().Result.Where(ord => ord.CustomerId == customerGuid);
+				var orderResponse = new List<OrderResponse>();
+				foreach (var order in customerOrders)
+				{
+					orderResponse.Add(order.ToOrderResponse());
+				}
+				return orderResponse;
+			}
+			throw new ArgumentException("Customer does not exist");
 		}
 
-		public Task<OrderResponse?> GetOrderById(Guid orderGuid)
+		public async Task<OrderResponse?> GetOrderById(Guid orderGuid)
 		{
-			throw new NotImplementedException();
+			var order = await _ordersRepository.GetOrderById(orderGuid);
+			return order?.ToOrderResponse() ?? null;
 		}
 		#endregion
 	}

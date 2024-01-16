@@ -20,12 +20,13 @@ namespace ClothingStore.UI.Extensions
 			service.AddScoped<IClothesRepository, ClothesRepository>();
 			service.AddScoped<IClothingVariantsRepository, ClothingVariantsRepository>();
 			service.AddScoped<IOrdersRepository, OrdersRepository>();
+			service.AddScoped<IOrderDetailsRepository, OrderDetailsRepository>();
 			service.AddScoped<ICustomerRepository, CustomerRepository>();
 
 			service.AddScoped<IClothesService, ClothesService>();
 			service.AddScoped<IClothingVariantsService, ClothingVariantsService>();
 			service.AddScoped<ICustomerService, CustomerService>();
-			service.AddScoped<IOrdersService, OrderService>();
+			service.AddScoped<IOrdersService, OrdersService>();
 
 			service.AddDbContext<ShopContext>(options => options.UseSqlServer(
 				configuration.GetConnectionString("DefaultConnection")));
