@@ -10,6 +10,5 @@ namespace ClothingStore.Core.DTO.Clothing
         public double? Price { get; set; }
         public Category? Category { get; set; }
         public string? Brand { get; set; }
-        public int? Stock { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace ClothingStore.ServiceTests.ClothingVariantsServiceTests
 		{
 			var request = new ClothingVariantAddRequest()
 			{
-				Name = ""
+				ClothingId = Guid.Empty,
 			};
 
 			await Assert.ThrowsAsync<ArgumentException>(async () =>
@@ -49,11 +49,11 @@ namespace ClothingStore.ServiceTests.ClothingVariantsServiceTests
 			var clothing = new Clothing() { Id = Guid.NewGuid(), Name = "name" };
 			var request = new ClothingVariantAddRequest()
 			{
-				Name = "name",
+				ClothingId = Guid.NewGuid(),
 				Color = "Red",
 				Size = Size.XL
 			};
-			_clothesRepository.GetClothingByName(Arg.Any<string>()).Returns(clothing);
+			_clothesRepository.GetClothingById(Arg.Any<Guid>()).Returns(clothing);
 			_clothingVariantsRepository.AddClothingVariant(Arg.Any<ClothingVariant>()).Returns(new ClothingVariant());
 
 			var response = await _clothingVariantsService.AddClothingVariant(request);

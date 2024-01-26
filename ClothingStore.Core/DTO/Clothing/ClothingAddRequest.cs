@@ -12,7 +12,5 @@ namespace ClothingStore.Core.DTO.Clothing
         public double Price { get; set; }
         public Category Category { get; set; }
         public string? Brand { get; set; }
-        [Range(0, double.MaxValue, ErrorMessage = "Stock can not be less than 0")]
-        public int Stock { get; set; }
     }
 }

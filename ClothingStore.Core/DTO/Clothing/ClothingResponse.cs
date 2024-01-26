@@ -11,7 +11,7 @@ namespace ClothingStore.Core.DTO.Clothing
         public double Price { get; set; }
         public Category Category { get; set; }
         public string? Brand { get; set; }
-        public int Stock { get; set; }
+        public int TotalStock { get; set; }
         public double Rating { get; set; }
         public ICollection<ClothingVariantResponse>? clothingVariants { get; set; }
     }

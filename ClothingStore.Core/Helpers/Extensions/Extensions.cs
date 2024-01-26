@@ -15,12 +15,13 @@ namespace ClothingStore.Core.Helpers.Extensions
 			{
 				Id = clothing.Id,
 				Name = clothing.Name,
-				Stock = clothing.Stock,
+				TotalStock = clothing.TotalStock,
 				Category = clothing.Category,
 				Description = clothing.Description,
 				Brand = clothing.Brand,
 				Price = clothing.Price,
-				Rating = clothing.Rating
+				Rating = clothing.Rating,
+				clothingVariants = clothing.ClothingVariants.Select(c => c.ToClothingVariantResponse()).ToList()
 			};
 
 			return response;
@@ -34,6 +35,7 @@ namespace ClothingStore.Core.Helpers.Extensions
 				Color = clothingVariant.Color,
 				Image = clothingVariant.Image,
 				Size = clothingVariant.Size,
+				Stock = clothingVariant.Stock
 			};
 
 			return response;

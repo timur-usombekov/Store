@@ -26,7 +26,6 @@ namespace ClothingStore.ServiceTests.ClothesServiceTests
 			var clothingAddRequest = new ClothingAddRequest()
 			{
 				Name = null,
-				Stock = -1,
 				Price = -1
 			};
 
@@ -259,7 +258,6 @@ namespace ClothingStore.ServiceTests.ClothesServiceTests
 				Brand = "OldBrand",
 				Category = Category.Tshirts,
 				Price = 10,
-				Stock = 10,
 			};
 			_clothesRepository.GetClothingById(oldClothing.Id).Returns(oldClothing);
 
@@ -270,8 +268,7 @@ namespace ClothingStore.ServiceTests.ClothesServiceTests
 				Description = "NewDescription",
 				Brand = "NewBrand",
 				Category = Category.Dresses,
-				Price = 100,
-				Stock = 100,
+				Price = 100
 			};
 
 			var newClothingResponse = await _clothesService.UpdateClothing(newClothingRequest);

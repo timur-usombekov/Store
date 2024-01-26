@@ -11,6 +11,7 @@ namespace ClothingStore.Core.Domain.Entities
 		public Guid OrderDetailId { get; set; }
 		public string? Image { get; set; }
 		public string Color { get; set; } = null!;
+		public int Stock { get; set; }
 		public Size Size { get; set; }
 
 		[ForeignKey(nameof(ClothingId))]

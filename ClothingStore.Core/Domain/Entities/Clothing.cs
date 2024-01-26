@@ -15,7 +15,7 @@ namespace ClothingStore.Core.Domain.Entities
 		public Category Category { get; set; }
 		[JsonConverter(typeof(JsonStringEnumConverter))]
         public string? Brand { get; set; }
-        public int Stock { get; set; }
+        public int TotalStock { get; set; }
         public double Rating { get; set; }
 
         // Navigation property

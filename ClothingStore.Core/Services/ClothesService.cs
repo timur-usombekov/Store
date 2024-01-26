@@ -37,7 +37,6 @@ namespace ClothingStore.Core.Services
 				Id = Guid.NewGuid(),
 				Name = clothingAddRequest.Name!,
 				Price = clothingAddRequest.Price,
-				Stock = clothingAddRequest.Stock,
 				Brand = clothingAddRequest.Brand,
 				Category = clothingAddRequest.Category,
 				Description = clothingAddRequest.Description,
@@ -105,7 +104,6 @@ namespace ClothingStore.Core.Services
 			oldClothing.Brand = clothingUpdateRequest.Brand ?? oldClothing.Brand;
 			oldClothing.Category = clothingUpdateRequest.Category ?? oldClothing.Category;
 			oldClothing.Price = clothingUpdateRequest.Price ?? oldClothing.Price;
-			oldClothing.Stock = clothingUpdateRequest.Stock ?? oldClothing.Stock;
 
 			await _clothesRepository.UpdateClothing(oldClothing);
 			return oldClothing.ToClothingResponse();

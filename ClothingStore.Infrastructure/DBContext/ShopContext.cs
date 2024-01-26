@@ -29,6 +29,8 @@ namespace ClothingStore.Infrastructure.DBContext
 
 			modelBuilder.Entity<Clothing>().ToTable("Clothes");
 			modelBuilder.Entity<ClothingVariant>().ToTable("ClothingVariants");
+			modelBuilder.Entity<ClothingVariant>().ToTable(tb => tb.HasTrigger("UpdateTotalStock"));
+
 			modelBuilder.Entity<Customer>().ToTable("Customers");
 			modelBuilder.Entity<Order>().ToTable("Orders");
 			modelBuilder.Entity<OrderDetail>().ToTable("OrderDetails");

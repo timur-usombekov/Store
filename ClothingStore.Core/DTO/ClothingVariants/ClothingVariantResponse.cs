@@ -10,6 +10,8 @@ namespace ClothingStore.Core.DTO.ClothingVariants
         public string? Image { get; set; }
         public string Color { get; set; } = null!;
         public Size Size { get; set; }
-    }
+		public int Stock { get; set; }
+
+	}
 
 }

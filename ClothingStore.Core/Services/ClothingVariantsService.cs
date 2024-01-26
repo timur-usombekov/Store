@@ -29,8 +29,8 @@ namespace ClothingStore.Core.Services
 
 			ValidationHelper.ValidateModel(clothingVariantAddRequest);
 
-			Clothing clothing = await _clothesRepository.GetClothingByName(clothingVariantAddRequest.Name!) ??
-				throw new ArgumentException("Can not find clothis with this name");
+			Clothing clothing = await _clothesRepository.GetClothingById(clothingVariantAddRequest.ClothingId!) ??
+				throw new ArgumentException("Can not find clothis with this id");
 
 			ClothingVariant clothingVariant = new()
 			{
@@ -94,6 +94,7 @@ namespace ClothingStore.Core.Services
 			oldClothingVariant.Color = clothingVariantUpdateRequest.Color ?? oldClothingVariant.Color;
 			oldClothingVariant.Image = clothingVariantUpdateRequest.Image ?? oldClothingVariant.Image;
 			oldClothingVariant.Size = clothingVariantUpdateRequest.Size ?? oldClothingVariant.Size;
+			oldClothingVariant.Stock = clothingVariantUpdateRequest.Stock ?? oldClothingVariant.Stock;
 
 			await _clothingVariantsRepository.UpdateClothingVariant(oldClothingVariant);
 			oldClothingVariant.Clothing = oldClothingVariant.Clothing;
