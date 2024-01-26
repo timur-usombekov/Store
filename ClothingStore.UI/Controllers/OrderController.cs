@@ -3,8 +3,9 @@ using ClothingStore.Core.ServiceContracts;
 
 namespace ClothingStore.UI.Controllers
 {
-	[Route("[controller]/[action]")]
-	public class OrderController : Controller
+	[Route("api/[controller]")]
+	[ApiController]
+	public class OrderController : ControllerBase
 	{
 		private readonly IOrdersService _orderService;
 

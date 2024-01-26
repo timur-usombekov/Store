@@ -1,6 +1,5 @@
 ﻿using ClothingStore.Core.Domain.Entities;
 using ClothingStore.Core.Domain.RepositoryContracts;
-using ClothingStore.Core.DTO.ClothingVariants;
 using ClothingStore.Core.DTO.OrderDetail;
 using ClothingStore.Core.Helpers;
 using ClothingStore.Core.Helpers.Extensions;
@@ -96,14 +95,12 @@ namespace ClothingStore.Core.Services
 				throw new ArgumentException("OrderDetail id doesn't exist");
 			}
 
-			OrderDetail newOrderDetail = new()
-			{
-				Id = oldOrderDetail.Id,
-				ClothingVariantId = updateOrderDetailRequest.ClothingVariantId ?? oldOrderDetail.ClothingVariantId,
-				OrderID = updateOrderDetailRequest.OrderId ?? oldOrderDetail.OrderID,
-				Quantity = updateOrderDetailRequest.Quantity ?? oldOrderDetail.Quantity,
-			};
-			var ord = await _orderDetailsRepository.UpdateOrderDetail(newOrderDetail);
+			oldOrderDetail.Id = oldOrderDetail.Id;
+			oldOrderDetail.ClothingVariantId = updateOrderDetailRequest.ClothingVariantId ?? oldOrderDetail.ClothingVariantId;
+			oldOrderDetail.OrderID = updateOrderDetailRequest.OrderId ?? oldOrderDetail.OrderID;
+			oldOrderDetail.Quantity = updateOrderDetailRequest.Quantity ?? oldOrderDetail.Quantity;
+			
+			var ord = await _orderDetailsRepository.UpdateOrderDetail(oldOrderDetail);
 			return ord.ToOrderDetailResponse();
 		}
 	}

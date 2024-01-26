@@ -100,19 +100,15 @@ namespace ClothingStore.Core.Services
 			var oldClothing = await _clothesRepository.GetClothingById(clothingUpdateRequest.Id) ??
 				throw new ArgumentException("Clothing was not found");
 
-			Clothing clothing = new()
-			{
-				Id = clothingUpdateRequest.Id,
-				Name = clothingUpdateRequest.Name ?? oldClothing.Name,
-				Description = clothingUpdateRequest.Description ?? oldClothing.Description,
-				Brand = clothingUpdateRequest.Brand ?? oldClothing.Brand,
-				Category = clothingUpdateRequest.Category ?? oldClothing.Category,
-				Price = clothingUpdateRequest.Price ?? oldClothing.Price,
-				Stock = clothingUpdateRequest.Stock ?? oldClothing.Stock
-			};
+			oldClothing.Name = clothingUpdateRequest.Name ?? oldClothing.Name;
+			oldClothing.Description = clothingUpdateRequest.Description ?? oldClothing.Description;
+			oldClothing.Brand = clothingUpdateRequest.Brand ?? oldClothing.Brand;
+			oldClothing.Category = clothingUpdateRequest.Category ?? oldClothing.Category;
+			oldClothing.Price = clothingUpdateRequest.Price ?? oldClothing.Price;
+			oldClothing.Stock = clothingUpdateRequest.Stock ?? oldClothing.Stock;
 
-			await _clothesRepository.UpdateClothing(clothing);
-			return clothing.ToClothingResponse();
+			await _clothesRepository.UpdateClothing(oldClothing);
+			return oldClothing.ToClothingResponse();
 		}
 		public async Task<bool> DeleteClothingById(Guid clothingGuid)
 		{

@@ -27,6 +27,7 @@ namespace ClothingStore.UI.Extensions
 			service.AddScoped<IClothingVariantsService, ClothingVariantsService>();
 			service.AddScoped<ICustomerService, CustomerService>();
 			service.AddScoped<IOrdersService, OrdersService>();
+			service.AddScoped<IOrderDetailsService, OrderDetailsService>();
 
 			service.AddDbContext<ShopContext>(options => options.UseSqlServer(
 				configuration.GetConnectionString("DefaultConnection")));

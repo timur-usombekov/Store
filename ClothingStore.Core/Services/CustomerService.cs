@@ -17,29 +17,6 @@ namespace ClothingStore.Core.Services
 			_customerRepository = customerRepository;
 		}
 
-		public Task<CustomerResponse> AddOrder(AddOrderRequest? addOrderRequest)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task<bool> DeleteOrderById(Guid orderGuid)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task<CustomerResponse> GetAllOrders()
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task<CustomerResponse?> GetCustomerOrders(Guid customerGuid)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task<CustomerResponse?> GetOrderById(Guid orderGuid)
-		{
-			throw new NotImplementedException();
-		}
+		
 	}
 }

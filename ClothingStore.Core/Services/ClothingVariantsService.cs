@@ -90,16 +90,14 @@ namespace ClothingStore.Core.Services
 			{
 				throw new ArgumentException("Clothing variant was not found");
 			}
-			var newClothingVariant = new ClothingVariant()
-			{
-				Id = clothingVariantUpdateRequest.Id,
-				Color = clothingVariantUpdateRequest.Color ?? oldClothingVariant.Color,
-				Image = clothingVariantUpdateRequest.Image ?? oldClothingVariant.Image,
-				Size = clothingVariantUpdateRequest.Size ?? oldClothingVariant.Size,
-			};
-			await _clothingVariantsRepository.UpdateClothingVariant(newClothingVariant);
-			newClothingVariant.Clothing = oldClothingVariant.Clothing;
-			return newClothingVariant.ToClothingVariantResponse();
+			oldClothingVariant.Id = clothingVariantUpdateRequest.Id;
+			oldClothingVariant.Color = clothingVariantUpdateRequest.Color ?? oldClothingVariant.Color;
+			oldClothingVariant.Image = clothingVariantUpdateRequest.Image ?? oldClothingVariant.Image;
+			oldClothingVariant.Size = clothingVariantUpdateRequest.Size ?? oldClothingVariant.Size;
+
+			await _clothingVariantsRepository.UpdateClothingVariant(oldClothingVariant);
+			oldClothingVariant.Clothing = oldClothingVariant.Clothing;
+			return oldClothingVariant.ToClothingVariantResponse();
 		}
 		public async Task<bool> DeleteClothingVariantById(Guid clothingVariantId)
 		{

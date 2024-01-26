@@ -7,11 +7,9 @@ namespace ClothingStore.UI.Controllers
     [AllowAnonymous]
     public class HomeController : Controller
     {
-
         [Route("/")]
         public IActionResult Index()
         {
-            
             return View();
         }
 
