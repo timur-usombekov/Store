@@ -10,7 +10,7 @@ namespace ClothingStore.Core.ServiceContracts
 {
 	public interface IOrderDetailsService
 	{
-		public Task<OrderDetailResponse> AddClothing(AddOrderDetailRequest? addOrderDetailRequest);
+		public Task<OrderDetailResponse> AddOrderDetail(AddOrderDetailRequest? addOrderDetailRequest);
 		public Task<List<OrderDetailResponse>> GetAllOrderDetails();
 		public Task<OrderDetailResponse?> GetOrderDetailById(Guid orderDetailId);
 		public Task<List<OrderDetailResponse>> GetOrderDetailsForOrder(Guid orderId);

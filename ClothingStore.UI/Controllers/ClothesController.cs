@@ -77,11 +77,21 @@ namespace ClothingStore.UI.Controllers
 		}
 		#endregion
 		#region variants
-		[HttpGet("variant/{guid}")]
+		[HttpGet("{guid}/variant")]
 		public async Task<ActionResult<IEnumerable<ClothingVariantResponse>>> GetClothingVariants(Guid guid)
 		{
-			var clothingVariant = await _clothingVariantsService.GetClothingVariantsByClothingId(guid);
-			if(clothingVariant == null)
+			var clothingVariants = await _clothingVariantsService.GetClothingVariantsByClothingId(guid);
+			if(clothingVariants == null)
+			{
+				return NotFound();
+			}
+			return clothingVariants;
+		}
+		[HttpGet("variant/{guid}")]
+		public async Task<ActionResult<ClothingVariantResponse>> GetClothingVariant(Guid guid)
+		{
+			var clothingVariant = await _clothingVariantsService.GetClothingVariantById(guid);
+			if (clothingVariant == null)
 			{
 				return NotFound();
 			}

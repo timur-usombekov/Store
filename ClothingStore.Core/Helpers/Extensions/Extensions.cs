@@ -57,7 +57,7 @@ namespace ClothingStore.Core.Helpers.Extensions
 				Id = order.Id,
 				OrderDate = order.OrderDate,
 				Customer = order.Customer.ToCustomerResponse(),
-				OrderDetails = new List<OrderDetailResponse>()
+				OrderDetails = order.OrderDetails.Select(o => o.ToOrderDetailResponse()).ToList()
 			};
 
 			return response;
@@ -66,6 +66,7 @@ namespace ClothingStore.Core.Helpers.Extensions
 		{
 			OrderDetailResponse response = new()
 			{
+				Id = orderDetail.Id,
 				Quantity = orderDetail.Quantity,
 				ClothingVariant = orderDetail.ClothingVariant.ToClothingVariantResponse()
 			};

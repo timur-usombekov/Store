@@ -11,14 +11,17 @@ namespace ClothingStore.Core.Services
 	{
 		private readonly IOrderDetailsRepository _orderDetailsRepository;
 		private readonly IOrdersRepository _ordersRepository;
+		private readonly IClothingVariantsRepository _clothingVariantsRepository;
 
-		public OrderDetailsService(IOrderDetailsRepository orderDetailsRepository, IOrdersRepository ordersRepository)
+		public OrderDetailsService(IOrderDetailsRepository orderDetailsRepository, IOrdersRepository ordersRepository,
+			IClothingVariantsRepository clothingVariantsRepository)
 		{
 			_orderDetailsRepository = orderDetailsRepository;
 			_ordersRepository = ordersRepository;
+			_clothingVariantsRepository = clothingVariantsRepository;
 		}
 
-		public async Task<OrderDetailResponse> AddClothing(AddOrderDetailRequest? addOrderDetailRequest)
+		public async Task<OrderDetailResponse> AddOrderDetail(AddOrderDetailRequest? addOrderDetailRequest)
 		{
 			if (addOrderDetailRequest == null)
 			{
@@ -39,8 +42,9 @@ namespace ClothingStore.Core.Services
 				Quantity = addOrderDetailRequest.Quantity,
 			};
 
-			await _orderDetailsRepository.AddOrderDetail(orderDetail);
-			var orderDetailWithNavProp = await _orderDetailsRepository.GetOrderDetailById(orderDetail.Id);
+			var orderDetailWithNavProp = await _orderDetailsRepository.AddOrderDetail(orderDetail);
+			orderDetailWithNavProp.ClothingVariant =
+				await _clothingVariantsRepository.GetClothingVariantById(orderDetailWithNavProp.ClothingVariantId);
 			return orderDetailWithNavProp.ToOrderDetailResponse();
 		}
 
@@ -57,6 +61,11 @@ namespace ClothingStore.Core.Services
 		public async Task<List<OrderDetailResponse>> GetAllOrderDetails()
 		{
 			var ordDet = await _orderDetailsRepository.GetAllOrderDetailsWithNavigationProperties();
+			foreach(var detail in ordDet)
+			{
+				detail.ClothingVariant =
+					await _clothingVariantsRepository.GetClothingVariantById(detail.ClothingVariantId);
+			}
 			return ordDet.Select(od => od.ToOrderDetailResponse()).ToList();
 		}
 
@@ -67,6 +76,8 @@ namespace ClothingStore.Core.Services
 			{
 				throw new ArgumentException("orderDetail doesn't exist");
 			}
+			ordDet.ClothingVariant =
+				await _clothingVariantsRepository.GetClothingVariantById(ordDet.ClothingVariantId);
 			return ordDet.ToOrderDetailResponse();
 		}
 
@@ -76,8 +87,15 @@ namespace ClothingStore.Core.Services
 			{
 				throw new ArgumentException("Order doesn't exist");
 			}
-			var orderdetails = await _orderDetailsRepository.GetAllOrderDetailsWithNavigationProperties();
-			return orderdetails.Where(od => od.OrderID == orderId)
+			var allOrderDetails = await _orderDetailsRepository.GetAllOrderDetailsWithNavigationProperties();
+			var orderDetailsForOrder = allOrderDetails.Where(od => od.OrderID == orderId);
+			foreach (var orderDetail in orderDetailsForOrder)
+			{
+				orderDetail.ClothingVariant =
+					await _clothingVariantsRepository.GetClothingVariantById(orderDetail.ClothingVariantId);
+			}
+
+			return orderDetailsForOrder
 				.Select(od => od.ToOrderDetailResponse())
 				.ToList();
 		}
@@ -101,6 +119,8 @@ namespace ClothingStore.Core.Services
 			oldOrderDetail.Quantity = updateOrderDetailRequest.Quantity ?? oldOrderDetail.Quantity;
 			
 			var ord = await _orderDetailsRepository.UpdateOrderDetail(oldOrderDetail);
+			ord.ClothingVariant =
+					await _clothingVariantsRepository.GetClothingVariantById(ord.ClothingVariantId);
 			return ord.ToOrderDetailResponse();
 		}
 	}

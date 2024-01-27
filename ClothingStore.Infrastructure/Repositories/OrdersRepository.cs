@@ -16,7 +16,8 @@ namespace ClothingStore.Infrastructure.Repositories
 		{
 			_dbContext.Orders.Add(order);
 			await _dbContext.SaveChangesAsync();
-			return order;
+
+			return await GetOrderById(order.Id);
 		}
 
 		public async Task<bool> DeleteOrderById(Guid id)

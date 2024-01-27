@@ -10,12 +10,15 @@ namespace ClothingStore.Core.Services
 	public class OrdersService : IOrdersService
 	{
 		private readonly IOrdersRepository _ordersRepository;
+		private readonly IClothingVariantsRepository _clothingVariantsRepository;
 		private readonly ICustomerRepository _customerRepository;
 
-		public OrdersService(IOrdersRepository ordersRepository, ICustomerRepository customerRepository)
+		public OrdersService(IOrdersRepository ordersRepository, ICustomerRepository customerRepository,
+			IClothingVariantsRepository clothingVariantsRepository)
 		{
 			_ordersRepository = ordersRepository;
 			_customerRepository = customerRepository;
+			_clothingVariantsRepository = clothingVariantsRepository;
 		}
 		#region Orders Operations
 		public async Task<OrderResponse> AddOrder(AddOrderRequest? addOrderRequest)
@@ -52,10 +55,15 @@ namespace ClothingStore.Core.Services
 
 		public async Task<List<OrderResponse>> GetAllOrders()
 		{
-			var orders = await _ordersRepository.GetAllOrders();
+			var orders = await _ordersRepository.GetAllOrdersWithNavigationProperties();
 			var orderResponse = new List<OrderResponse>();
 			foreach (var order in orders)
 			{
+				foreach (var orderDetail in order.OrderDetails)
+				{
+					orderDetail.ClothingVariant = await _clothingVariantsRepository.GetClothingVariantById(
+						orderDetail.ClothingVariantId);
+				}
 				orderResponse.Add(order.ToOrderResponse());
 			}
 			return orderResponse;
@@ -79,6 +87,15 @@ namespace ClothingStore.Core.Services
 		public async Task<OrderResponse?> GetOrderById(Guid orderGuid)
 		{
 			var order = await _ordersRepository.GetOrderById(orderGuid);
+			if (order == null)
+			{
+				return null;
+			}
+			foreach (var orderDetail in order.OrderDetails)
+			{
+				orderDetail.ClothingVariant = await _clothingVariantsRepository.GetClothingVariantById(
+					orderDetail.ClothingVariantId);
+			}
 			return order?.ToOrderResponse() ?? null;
 		}
 		#endregion

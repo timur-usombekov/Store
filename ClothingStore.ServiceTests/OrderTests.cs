@@ -18,14 +18,15 @@ namespace ClothingStore.ServiceTests.OrdersServiceTests
 		private readonly IOrdersService _orderService;
 		private readonly IOrdersRepository _ordersRepository;
 		private readonly ICustomerRepository _customerRepository;
-
+		private readonly IClothingVariantsRepository _clothingVariantsRepository;
 		private readonly IFixture _fixture;
 
 		public OrderTests()
 		{
 			_ordersRepository = Substitute.For<IOrdersRepository>();
 			_customerRepository = Substitute.For<ICustomerRepository>();
-			_orderService = new OrdersService(_ordersRepository, _customerRepository);
+			_clothingVariantsRepository = Substitute.For<IClothingVariantsRepository>();
+			_orderService = new OrdersService(_ordersRepository, _customerRepository, _clothingVariantsRepository);
 			_fixture = new Fixture();
 			_fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
 				.ForEach(b => _fixture.Behaviors.Remove(b));
