@@ -1,5 +1,6 @@
 ﻿using ClothingStore.Core.Domain.Entities;
 using ClothingStore.Core.Domain.RepositoryContracts;
+using ClothingStore.Core.DTO.ClothingVariants;
 using ClothingStore.Core.DTO.OrderDetail;
 using ClothingStore.Core.Helpers;
 using ClothingStore.Core.Helpers.Extensions;
@@ -33,6 +34,12 @@ namespace ClothingStore.Core.Services
 			{
 				throw new ArgumentException("Order doesn't exist");
 			}
+			var variant = await _clothingVariantsRepository.GetClothingVariantById(addOrderDetailRequest.ClothingVariantId) ??
+				throw new ArgumentException("Clothing variant doesn't exist");
+			if (addOrderDetailRequest.Quantity > variant.Stock)
+			{
+				throw new ArgumentException("Insufficient stock for the order");
+			}
 
 			OrderDetail orderDetail = new OrderDetail()
 			{
@@ -43,8 +50,9 @@ namespace ClothingStore.Core.Services
 			};
 
 			var orderDetailWithNavProp = await _orderDetailsRepository.AddOrderDetail(orderDetail);
-			orderDetailWithNavProp.ClothingVariant =
-				await _clothingVariantsRepository.GetClothingVariantById(orderDetailWithNavProp.ClothingVariantId);
+			variant.Stock -= orderDetail.Quantity;
+			await _clothingVariantsRepository.UpdateClothingVariant(variant);
+			orderDetailWithNavProp.ClothingVariant = variant;
 			return orderDetailWithNavProp.ToOrderDetailResponse();
 		}
 
@@ -55,6 +63,13 @@ namespace ClothingStore.Core.Services
 			{
 				throw new ArgumentException("orderDetail doesn't exist");
 			}
+			var clothingVariant = await _clothingVariantsRepository.GetClothingVariantById(ordDet.ClothingVariantId);
+			if(clothingVariant is null)
+			{
+				throw new ArgumentException("clothingVariant doesn't exist");
+			}
+			clothingVariant.Stock += ordDet.Quantity;
+			await _clothingVariantsRepository.UpdateClothingVariant(clothingVariant);
 			return await _orderDetailsRepository.DeleteOrderDetailById(orderDetailId);
 		}
 
@@ -112,15 +127,19 @@ namespace ClothingStore.Core.Services
 			{
 				throw new ArgumentException("OrderDetail id doesn't exist");
 			}
-
+			var variant = await _clothingVariantsRepository.GetClothingVariantById(oldOrderDetail.ClothingVariantId) ??
+				throw new ArgumentException("Clothing variant doesn't exist");
+			if (oldOrderDetail.Quantity > variant.Stock)
+			{
+				throw new ArgumentException("Insufficient stock for the order");
+			}
 			oldOrderDetail.Id = oldOrderDetail.Id;
 			oldOrderDetail.ClothingVariantId = updateOrderDetailRequest.ClothingVariantId ?? oldOrderDetail.ClothingVariantId;
 			oldOrderDetail.OrderID = updateOrderDetailRequest.OrderId ?? oldOrderDetail.OrderID;
 			oldOrderDetail.Quantity = updateOrderDetailRequest.Quantity ?? oldOrderDetail.Quantity;
 			
 			var ord = await _orderDetailsRepository.UpdateOrderDetail(oldOrderDetail);
-			ord.ClothingVariant =
-					await _clothingVariantsRepository.GetClothingVariantById(ord.ClothingVariantId);
+			ord.ClothingVariant = variant;
 			return ord.ToOrderDetailResponse();
 		}
 	}

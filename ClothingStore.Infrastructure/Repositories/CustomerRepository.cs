@@ -54,7 +54,7 @@ namespace ClothingStore.Infrastructure.Repositories
 				.FirstOrDefaultAsync(c => c.Id == id);
 		}
 
-		public async Task<Customer> UpdateClothing(Customer customer)
+		public async Task<Customer> UpdateCustomer(Customer customer)
 		{
 			_dbContext.Customers.Update(customer);
 			await _dbContext.SaveChangesAsync();

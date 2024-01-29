@@ -67,7 +67,7 @@ namespace ClothingStore.UI.Controllers
 			return Ok(updated);
 		}
 		[HttpDelete("{guid}")]
-		public async Task<ActionResult<ClothingResponse>> DeleteClothing(Guid guid)
+		public async Task<IActionResult> DeleteClothing(Guid guid)
 		{
 			if (await _clothesService.DeleteClothingById(guid))
 			{

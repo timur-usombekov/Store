@@ -9,6 +9,7 @@ namespace ClothingStore.Core.DTO.Customer
 {
 	public class UpdateCustomerRequest
 	{
+		public Guid CustomerId { get; set; }
 		public string? Name { get; set; }
 		public string? Email { get; set; }
 	}

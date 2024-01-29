@@ -10,6 +10,6 @@ namespace ClothingStore.Core.Domain.RepositoryContracts
 		public Task<Customer?> GetCustomerByEmail(string email);
 		public Task<Customer?> GetCustomerById(Guid id);
 		public Task<bool> DeleteCustomerById(Guid id);
-		public Task<Customer> UpdateClothing(Customer customer);
+		public Task<Customer> UpdateCustomer(Customer customer);
 	}
 }

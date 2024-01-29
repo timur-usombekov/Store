@@ -44,6 +44,7 @@ namespace ClothingStore.Core.Helpers.Extensions
 		{
 			CustomerResponse response = new()
 			{
+				Id = customer.Id,
 				Name = customer.Name,
 			};
 

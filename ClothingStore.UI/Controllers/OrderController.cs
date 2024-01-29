@@ -52,7 +52,7 @@ namespace ClothingStore.UI.Controllers
 			}
 		}
 		[HttpDelete("{guid}")]
-		public async Task<ActionResult<OrderResponse>> DeleteOrder(Guid guid)
+		public async Task<IActionResult> DeleteOrder(Guid guid)
 		{
 			if (await _orderService.DeleteOrderById(guid))
 			{
@@ -108,7 +108,7 @@ namespace ClothingStore.UI.Controllers
 			return Ok(updatedDetail);
 		}
 		[HttpDelete("details/{guid}")]
-		public async Task<ActionResult<OrderResponse>> DeleteOrderDetail(Guid guid)
+		public async Task<IActionResult> DeleteOrderDetail(Guid guid)
 		{
 			if (await _orderDetailsService.DeleteOrderDetailById(guid))
 			{
